@@ -1,0 +1,183 @@
+// Variables
+var score = 0;
+var lives = 5;
+
+// Create Sprites
+var player = createSprite(200, 200);
+player.setAnimation("alienLeft");
+
+var life = createSprite(randomNumber(50, 350), randomNumber(-350, -400));
+life.setAnimation("life");
+life.velocityY = 3;
+
+var star1 = createSprite(randomNumber(50, 350), randomNumber(-30, -60));
+star1.setAnimation("star");
+star1.velocityY = 3;
+
+var star2 = createSprite(randomNumber(50, 350), randomNumber(-230, -260));
+star2.setAnimation("star");
+star2.velocityY = 3;
+
+var platform1 = createSprite(100, 0);
+platform1.setAnimation("platform");
+platform1.velocityY = 2;
+
+var platform2 = createSprite(300, -200);
+platform2.setAnimation("platform");
+platform2.velocityY = 2;
+
+function draw() {
+  // draw the background
+  if (score > 24) {
+    background2();
+  } else {
+    background1();
+  }
+  showScore();
+  showLives();
+  // update the sprites
+  loopPlatforms();
+  loopItems();
+  playerFall();
+  controlPlayer();
+  playerLands();
+  collectItems();
+  loseLives();
+  gameEnd();
+  sideWalls();
+  
+  drawSprites();
+}
+
+// Functions
+function background1() {
+  background("darkBlue");
+  noStroke();
+  fill("yellow");
+  ellipse(randomNumber(0, 400), randomNumber(0, 400), 3, 3);
+  ellipse(randomNumber(0, 400), randomNumber(0, 400), 3, 3);
+  ellipse(340, 50, 60, 60);
+  fill("darkBlue");
+  ellipse(320, 30, 60, 60);
+}
+
+function background2() {
+  background("lightBlue");
+  noStroke();
+  fill("yellow");
+  ellipse(340, 50, 60, 60);
+}
+
+function showScore() {
+  fill("white");
+  textSize(20);
+  text("Score: ",10, 10, 80, 20);
+  text(score, 75, 26);
+}
+
+function showLives() {
+  fill("white");
+  textSize(20);
+  text("Lives: ",200, 10, 80, 20);
+  text(lives, 262, 26);
+}
+
+function loopPlatforms() {
+  if (platform1.y > 410) {
+    platform1.x = 100;
+    platform1.y = -10;
+  }
+  if (platform2.y > 410) {
+    platform2.x = 300;
+    platform2.y = -10;
+  }
+}
+
+function loopItems() {
+  if (star1.y > 410) {
+    star1.x = randomNumber(50, 350);
+    star1.y = randomNumber(-30, -60);
+  }
+  if (star2.y > 410) {
+    star2.x = randomNumber(50, 350);
+    star2.y = randomNumber(-30, -60);
+  }
+  if (life.y > 410) {
+    life.x = randomNumber(50, 350);
+    life.y = randomNumber(-30, -60);
+  }
+}
+
+function playerFall() {
+  player.velocityY = player.velocityY + 0.8;
+}
+
+function controlPlayer() {
+  if (keyDown("w")) {
+    player.velocityY = -5;
+  }
+  if (keyDown("a")) {
+    player.x = player.x - 5;
+    player.setAnimation("alienLeft");
+  }
+  if (keyDown("d")) {
+    player.x = player.x + 5;
+    player.setAnimation("alienRight");
+  }
+}
+
+function playerLands() {
+  player.collide(platform1);
+  player.collide(platform2);
+}
+
+function collectItems() {
+  if (player.isTouching(star1)) {
+    star1.x = randomNumber(50, 350);
+    star1.y = randomNumber(-30, -60);
+    score = score + 1;
+  }
+  if (player.isTouching(star2)) {
+    star2.x = randomNumber(50, 350);
+    star2.y = randomNumber(-30, -60);
+    score = score + 1;
+  }
+  if (player.isTouching(life)) {
+    life.x = randomNumber(50, 350);
+    life.y = randomNumber(-750, -800);
+    lives = lives + 1;
+  }
+}
+
+function loseLives() {
+  if (player.y > 400) {
+    player.x = 200;
+    player.y = 200;
+    lives = lives - 1;
+  }
+}
+
+function gameEnd() {
+  if (lives < 1) {
+    background("black");
+    fill(rgb(96, 67, 168));
+    textSize(40);
+    textAlign(CENTER, CENTER);
+    text("Game Over", 200, 180);
+    textSize(20);
+    text("Press Reset to try again", 200, 220);
+    score.visible = false;
+    lives.visible = false;
+    player.visible = false;
+    star1.visible = false;
+    star2.visible = false;
+    life.visible = false;
+    platform1.visible = false;
+    platform2.visible = false;
+  }
+}
+function sideWalls() {
+  createEdgeSprites();
+  player.collide(leftEdge);
+  player.collide(rightEdge);
+}
