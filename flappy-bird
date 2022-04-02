@@ -1,0 +1,397 @@
+//Variables and sprites
+
+//Pipe 1 top variable
+var pipe1a = createSprite(568, randomNumber(330, 470));
+pipe1a.scale = 1.2;
+
+//Pipe 1 bottom variable
+var pipe1b = createSprite(0, 0);
+pipe1b.scale = 1.2;
+
+//Pipe 2 top variable
+var pipe2a = createSprite(718, randomNumber(330, 470));
+pipe2a.scale = 1.2;
+
+//Pipe 2 bottom variable
+var pipe2b = createSprite(0, 0);
+pipe2b.scale = 1.2;
+
+//Pipe 3 top variable
+var pipe3a = createSprite(868, randomNumber(330, 470));
+pipe3a.scale = 1.2;
+
+//Pipe 3 bottom variable
+var pipe3b = createSprite(0, 0);
+pipe3b.scale = 1.2;
+
+//Point 1 variable
+var point1 = createSprite(0, 0);
+
+//Point 2 variable
+var point2 = createSprite(0, 0);
+
+//Point 3 variable
+var point3 = createSprite(0, 0);
+
+//Ground variable
+var groundCollide = createSprite(200, 530);
+
+//Ground kill bird variable
+var groundKill = createSprite(200, 520);
+
+//Bird variable
+var bird = createSprite(125, 192);
+bird.setAnimation("yellowFly");
+bird.scale = 1.3;
+
+//Start screen variable
+var start = createSprite(200, 170);
+start.visible = false;
+
+//End screen variable
+var end = createSprite(200, 170);
+end.setAnimation("end");
+end.visible = false;
+
+//Score value
+var score = 0;
+
+//Living value
+var living = true;
+
+//Start value
+var startVar = true;
+
+//End value
+var endVar = false;
+
+
+//Draw function
+function draw() { 
+  //Background changes when new level is reached
+  if (score > 19) { 
+    background3();
+  } else if ((score > 9)) {
+    background2();
+  } else {
+    background1();
+  }
+
+  //Calls functions
+  collideGround();
+  changeAnimation();
+  changeAnimation();
+  pipeSet1();
+  pipeSet2();
+  pipeSet3();
+  addPoint();
+  killPlayer();
+  gameStart();
+  gameEnd();
+
+  drawSprites();
+  showScore();
+}
+
+
+//Functions
+
+//Background 1
+function background1() {
+  background(rgb(149, 200, 252));
+  fill("white");
+  noStroke();
+  ellipse(110, 100, 180, 60);
+  ellipse(170, 130, 150, 60);
+  ellipse(310, 60, 120, 50);
+  fill(rgb(204, 177, 124));
+  rect(0, 325, 400, 75);
+  fill(rgb(80, 150, 77));
+  rect(0, 320, 400, 20);
+  fill(rgb(87, 74, 49));
+  rect(0, 318, 400, 2);
+  fill(rgb(140, 124, 91));
+  rect(0, 340, 400, 4);
+}
+
+//Background 2
+function background2() {
+  background(rgb(1, 43, 110));
+  fill("white");
+  noStroke();
+  ellipse(randomNumber(0, 400), randomNumber(0, 400), 3, 3);
+  ellipse(randomNumber(0, 400), randomNumber(0, 400), 3, 3);
+  fill(rgb(204, 177, 124));
+  rect(0, 325, 400, 75);
+  fill(rgb(80, 150, 77));
+  rect(0, 320, 400, 20);
+  fill(rgb(87, 74, 49));
+  rect(0, 318, 400, 2);
+  fill(rgb(140, 124, 91));
+  rect(0, 340, 400, 4);
+}
+
+//Background 3
+function background3() {
+  background(rgb(120, 53, 189));
+  fill("pink");
+  noStroke();
+  ellipse(randomNumber(0, 400), randomNumber(0, 400), 3, 3);
+  ellipse(randomNumber(0, 400), randomNumber(0, 400), 3, 3);
+  fill(rgb(204, 177, 124));
+  rect(0, 325, 400, 75);
+  fill(rgb(80, 150, 77));
+  rect(0, 320, 400, 20);
+  fill(rgb(87, 74, 49));
+  rect(0, 318, 400, 2);
+  fill(rgb(140, 124, 91));
+  rect(0, 340, 400, 4);
+}
+
+//Gravity
+function playerGravity() {
+  bird.velocityY = bird.velocityY + 0.8;
+}
+
+//Controls
+function playerControls() {
+  if (keyDown("space")) {
+    bird.velocityY = -7;
+  }
+  if (score > 19) {
+    if (keyDown("space")) {
+      bird.setAnimation("redFly");
+    } else {
+      bird.setAnimation("redGlide");
+    }
+  } else if ((score > 9)) {
+    if (keyDown("space")) {
+      bird.setAnimation("blueFly");
+    } else {
+      bird.setAnimation("blueGlide");
+    }
+  } else {
+    if (keyDown("space")) {
+      bird.setAnimation("yellowFly");
+    } else {
+      bird.setAnimation("yellowGlide");
+    }
+  }
+}
+
+//Collide with ground
+function collideGround() {
+  groundCollide.setAnimation("groundCollide");
+  groundCollide.visible = false;
+  bird.collide(groundCollide);
+}
+
+//Pipe group 1
+function pipeSet1() {
+  pipe1b.y = pipe1a.y - 500;
+  pipe1b.x = pipe1a.x;
+}
+
+//Pipe group 2
+function pipeSet2() {
+  pipe2b.y = pipe2a.y - 500;
+  pipe2b.x = pipe2a.x;
+}
+
+//Pipe group 3
+function pipeSet3() {
+  pipe3b.y = pipe3a.y - 500;
+  pipe3b.x = pipe3a.x;
+}
+
+//Changes player anims when new level is reached
+function changeAnimation() {
+  if (score > 19) { 
+    pipe1a.setAnimation("pipeGreen1");
+    pipe1b.setAnimation("pipeGreen2");
+    pipe2a.setAnimation("pipeGreen1");
+    pipe2b.setAnimation("pipeGreen2");
+    pipe3a.setAnimation("pipeGreen1");
+    pipe3b.setAnimation("pipeGreen2");
+  } else if ((score > 9)) {
+    pipe1a.setAnimation("pipeRed1");
+    pipe1b.setAnimation("pipeRed2");
+    pipe2a.setAnimation("pipeRed1");
+    pipe2b.setAnimation("pipeRed2");
+    pipe3a.setAnimation("pipeRed1");
+    pipe3b.setAnimation("pipeRed2");
+  } else {
+    pipe1a.setAnimation("pipeGreen1");
+    pipe1b.setAnimation("pipeGreen2");
+    pipe2a.setAnimation("pipeGreen1");
+    pipe2b.setAnimation("pipeGreen2");
+    pipe3a.setAnimation("pipeGreen1");
+    pipe3b.setAnimation("pipeGreen2");
+  }
+}
+
+//Pipes moving and looping
+function pipeMovement() {
+  pipe1a.x = pipe1a.x - 3;
+  pipe2a.x = pipe2a.x - 3;
+  pipe3a.x = pipe3a.x - 3;
+  if (pipe1a.x < -26) {
+    pipe1a.x = 426;
+    pipe1a.y = randomNumber(330, 470);
+  }
+  if (pipe2a.x < -26) {
+    pipe2a.x = 426;
+    pipe2a.y = randomNumber(330, 470);
+  }
+  if (pipe3a.x < -26) {
+    pipe3a.x = 426;
+    pipe3a.y = randomNumber(330, 470);
+  }
+}
+
+//Shows the score
+function showScore() {
+  fill("white");
+  textSize(40);
+  stroke("black");
+  strokeWeight(4);
+  textFont("Impact");
+  textAlign(CENTER, CENTER);
+  text(score, 200, 50);
+}
+
+//Adds points
+function addPoint() {
+  point1.setAnimation("point1");
+  point2.setAnimation("point2");
+  point3.setAnimation("point3");
+  point1.y = 200;
+  point2.y = 200;
+  point3.y = 200;
+  point1.x = pipe1a.x;
+  point2.x = pipe2a.x;
+  point3.x = pipe3a.x;
+  point1.visible = false;
+  point2.visible = false;
+  point3.visible = false;
+  if (bird.isTouching (point1)) {
+    score = score + 1;
+    point1.destroy();
+  }
+  if (bird.isTouching (point2)) {
+    score = score + 1;
+    point2.destroy();
+  }
+  if (bird.isTouching (point3)) {
+    score = score + 1;
+    point3.destroy();
+  }
+  if (pipe1a.x < -1) {
+    point1 = createSprite(-10, 0);
+    point1.setAnimation("point1");
+  }
+  if (pipe2a.x < -1) {
+    point2 = createSprite(-10, 0);
+    point2.setAnimation("point2");
+  }
+  if (pipe3a.x < -1) {
+    point3 = createSprite(-10, 0);
+    point3.setAnimation("point3");
+  }
+}
+
+//Kills player
+function killPlayer() {
+  groundKill.setAnimation("groundKill");
+  groundKill.visible = false;
+  if (bird.isTouching(pipe1a)) {
+    living = false;
+  }
+  if (bird.isTouching(pipe1b)) {
+    living = false;
+  }
+  if (bird.isTouching(pipe2a)) {
+    living = false;
+  }
+  if (bird.isTouching(pipe2b)) {
+    living = false;
+  }
+  if (bird.isTouching(pipe3a)) {
+    living = false;
+  }
+  if (bird.isTouching(pipe3b)) {
+    living = false;
+  }
+  if (bird.isTouching(groundKill)) {
+    living = false;
+  }
+  if (living == false) {
+    pipe1a.x = pipe1a.x + 3;
+    pipe2a.x = pipe2a.x + 3;
+    pipe3a.x = pipe3a.x + 3;
+    endVar = true;
+  }
+}
+
+//Start screen
+function gameStart() {
+  start.setAnimation("start");
+  if (startVar == true) {
+    if (keyDown("space")) {
+      start.y = 600;
+    }
+    if (start.y == 600) {
+      startVar = false;
+    }
+  }
+  if (startVar == true) {
+    bird.setAnimation("yellowFly");
+    start.visible = true;
+    bird.velocityY = 0;
+    if (keyDown("space")) {
+      bird.velocityY = 0;
+    }
+  }
+  if (startVar == false) {
+    start.y = 800;
+    pipeMovement();
+    playerControls();
+    playerGravity();
+  }
+}
+
+//End screen
+function gameEnd() {
+  if (endVar == true) {
+    bird.velocityY = 0;
+    end.y = 170;
+    if (keyDown("space")) {
+      bird.velocityY = 0;
+      if (score > 19) { 
+        bird.setAnimation("redGlide");
+      } else if ((score > 9)) {
+        bird.setAnimation("blueGlide");
+      } else {
+        bird.setAnimation("yellowGlide");
+      }
+    }
+    end.visible = true;
+    if (mouseWentUp("leftButton")) {
+      end.y = 800;
+    }
+    if (end.y == 800) {
+      endVar = false;
+      score = 0;
+    }
+    if (endVar == false) {
+      end.y = 800;
+      start.y= 170;
+      startVar = true;
+      living = true;
+      pipe1a.x = 568;
+      pipe2a.x = 718;
+      pipe3a.x = 868;
+      bird.y = 192;
+    }
+  }
+}
