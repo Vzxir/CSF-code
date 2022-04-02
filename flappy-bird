@@ -40,18 +40,20 @@ var groundCollide = createSprite(200, 530);
 var groundKill = createSprite(200, 520);
 
 //Bird variable
-var bird = createSprite(125, 192);
+var bird = createSprite(125, 190);
 bird.setAnimation("yellowFly");
 bird.scale = 1.3;
 
 //Start screen variable
-var start = createSprite(200, 170);
+var start = createSprite(200, 180);
 start.visible = false;
+start.scale = 0.6;
 
 //End screen variable
-var end = createSprite(200, 170);
+var end = createSprite(200, 180);
 end.setAnimation("end");
 end.visible = false;
+end.scale = 0.6;
 
 //Score value
 var score = 0;
@@ -364,7 +366,7 @@ function gameStart() {
 function gameEnd() {
   if (endVar == true) {
     bird.velocityY = 0;
-    end.y = 170;
+    end.y = 180;
     if (keyDown("space")) {
       bird.velocityY = 0;
       if (score > 19) { 
@@ -385,7 +387,7 @@ function gameEnd() {
     }
     if (endVar == false) {
       end.y = 800;
-      start.y= 170;
+      start.y= 180;
       startVar = true;
       living = true;
       pipe1a.x = 568;
